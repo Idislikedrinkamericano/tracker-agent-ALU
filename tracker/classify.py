@@ -1,7 +1,10 @@
 """Rule-based classifier for recruiting emails.
 
 Order matters: rejection patterns are checked first because rejection
-emails often mention "interview process". All matching is case-insensitive
+emails often mention "interview process". The interview rule only fires
+on invitation signals (invite/schedule/pick-a-time) -- the bare word
+"interview" also appears in confirmation emails ("our interview process")
+and must not trigger on its own. All matching is case-insensitive
 on subject + snippet.
 """
 import re
@@ -19,9 +22,13 @@ RULES = [
         "take-home assessment", "technical assessment", "codility",
     ]),
     ("interview", [
-        "interview", "phone screen", "schedule a call", "next steps",
-        "onsite", "on-site", "technical screen", "meet the team",
-        "introductory call",
+        "invite you to interview", "invited to interview",
+        "interview invitation", "schedule an interview",
+        "schedule a phone", "schedule a call", "schedule some time",
+        "phone screen", "technical screen", "introductory call",
+        "onsite", "on-site", "final round", "calendly",
+        "interview availability", "select a time", "pick a time",
+        "choose a time",
     ]),
     ("confirmation", [
         "application received", "we have received your application",

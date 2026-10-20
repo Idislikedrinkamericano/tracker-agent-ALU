@@ -6,7 +6,7 @@ gmail:
      OR from:myworkdayjobs.com OR from:workday.com
      OR from:smartrecruiters.com OR from:icims.com
      OR from:jobvite.com OR subject:interview OR subject:"online assessment")
-  days_back: 14
+  days_back: 30
 
 # Known companies: used to match emails to a company name.
 # Add yours as you apply. Matching is case-insensitive substring on
