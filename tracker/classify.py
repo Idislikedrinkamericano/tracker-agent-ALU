@@ -16,6 +16,8 @@ RULES = [
         "pursue other candidates", "not selected", "we regret to inform",
         "will not be moving", "no longer under consideration",
         "decided not to move forward",
+        "pursuing candidates", "more closely match",
+        "proceeding with other candidates",
     ]),
     ("oa", [
         "assessment", "hackerrank", "codesignal", "codility", "take-home",
@@ -59,9 +61,13 @@ CATEGORY_TO_STATUS = {
 
 def classify(subject, snippet):
     text = f"{subject} {snippet}".lower()
+    subj = subject.lower()
     for category, keywords in RULES:
+        # OA signals must appear in the subject: a job-alert email whose
+        # body happens to mention "assessment" is not an OA invite.
+        pool = subj if category == "oa" else text
         for kw in keywords:
-            if kw in text:
+            if kw in pool:
                 return category, kw
     return "other", ""
 
@@ -70,7 +76,9 @@ def extract_company(from_header, subject, known_companies, ats_domains):
     """Best-effort company match. Returns a name or 'Unknown'."""
     hay = f"{from_header} {subject}".lower()
     for name in known_companies:
-        if name.lower() in hay:
+        # Word-boundary match: plain substring makes "wing" hit "following"
+        # and "arc" hit "research", stealing other companies' emails.
+        if re.search(r"\b" + re.escape(name.lower()) + r"\b", hay):
             return name
     # Try the From display name, e.g. "Jane via Greenhouse" -> "Jane"
     m = re.match(r'"?([^"<@]+?)"?\s*(?:via|<|$)', from_header)

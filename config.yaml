@@ -3,17 +3,20 @@ gmail:
   # Gmail search query for recruiting emails. Tune to taste.
   query: >-
     (subject:application OR subject:applying OR subject:interview
-     OR subject:assessment OR subject:"thank you" OR subject:received
+     OR subject:assessment OR subject:"thank you"
      OR from:greenhouse.io OR from:greenhouse-mail.io OR from:lever.co
      OR from:ashbyhq.com OR from:myworkday.com OR from:myworkdayjobs.com
      OR from:workday.com OR from:smartrecruiters.com OR from:icims.com
      OR from:jobvite.com OR from:taleo.net OR from:coderbyte.com
      OR from:hackerrank.com OR from:codesignal.com)
+    -from:chase.com -from:capitalone.com -from:linkedin.com
+    -subject:"credit card"
+
   days_back: 30
 
 # Known companies: used to match emails to a company name.
-# Add yours as you apply. Matching is case-insensitive substring on
-# the From header and subject.
+# Add yours as you apply. Matching is case-insensitive, word-boundary
+# on the From header and subject.
 companies:
   - Google
   - Intuit
@@ -65,6 +68,18 @@ companies:
   - Cloudflare
   - xAI
   - IXL
+  - Salesforce
+  - Datadog
+  - Waymo
+  - Roblox
+  - Wing
+  - Rivian
+  - Sigma Computing
+  - Dandy
+  - Grow Therapy
+  - Notion
+  - Verkada
+  - Arc
 
 # Sender domains that are pure ATS plumbing (never a company name).
 ats_domains:
