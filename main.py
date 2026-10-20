@@ -43,23 +43,23 @@ def cmd_sync(_args):
 
 
 def cmd_digest(args):
-    from tracker import store
+    from tracker import store, report
     conn = store.connect(BASE_DIR)
-    store.show_digest(conn, args.limit)
+    report.show_digest(conn, args.limit)
     conn.close()
 
 
 def cmd_stats(_args):
-    from tracker import store
+    from tracker import store, report
     conn = store.connect(BASE_DIR)
-    store.show_stats(conn)
+    report.show_stats(conn)
     conn.close()
 
 
 def cmd_rejected(_args):
-    from tracker import store
+    from tracker import store, report
     conn = store.connect(BASE_DIR)
-    store.show_rejected(conn)
+    report.show_rejected(conn)
     conn.close()
 
 

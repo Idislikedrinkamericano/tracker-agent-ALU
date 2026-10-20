@@ -1,0 +1,6 @@
+credentials.json
+token.json
+tracker.db
+.venv/
+__pycache__/
+*.pyc
