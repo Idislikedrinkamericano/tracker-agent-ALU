@@ -2,16 +2,50 @@
 gmail:
   # Gmail search query for recruiting emails. Tune to taste.
   query: >-
-    (from:greenhouse.io OR from:lever.co OR from:ashbyhq.com
-     OR from:myworkdayjobs.com OR from:workday.com
-     OR from:smartrecruiters.com OR from:icims.com
-     OR from:jobvite.com OR subject:interview OR subject:"online assessment")
+    (subject:application OR subject:applying OR subject:interview
+     OR subject:assessment OR subject:"thank you" OR subject:received
+     OR from:greenhouse.io OR from:greenhouse-mail.io OR from:lever.co
+     OR from:ashbyhq.com OR from:myworkday.com OR from:myworkdayjobs.com
+     OR from:workday.com OR from:smartrecruiters.com OR from:icims.com
+     OR from:jobvite.com OR from:taleo.net OR from:coderbyte.com
+     OR from:hackerrank.com OR from:codesignal.com)
   days_back: 30
 
 # Known companies: used to match emails to a company name.
 # Add yours as you apply. Matching is case-insensitive substring on
 # the From header and subject.
 companies:
+  - Google
+  - Intuit
+  - Gecko Robotics
+  - Robinhood
+  - Pinterest
+  - DoorDash
+  - Amgen
+  - Whatnot
+  - Harvey
+  - Hex
+  - Adobe
+  - Upstart
+  - Genesis Molecular AI
+  - GE Vernova
+  - Veeam
+  - General Motors
+  - Ramp
+  - Together AI
+  - Glean
+  - Intel
+  - Neuralink
+  - Sierra
+  - Netic
+  - Mercor
+  - Pylon
+  - Vercel
+  - Optiver
+  - Citadel
+  - Citadel Securities
+  - DRW
+  - Snap
   - Stripe
   - Figma
   - Deepgram
@@ -24,12 +58,13 @@ companies:
   - T-Mobile
   - Viam
   - Circleback
-  - Netic
+  - Human Computer Lab
   - Affirm
   - Coinbase
   - Amazon
   - Cloudflare
   - xAI
+  - IXL
 
 # Sender domains that are pure ATS plumbing (never a company name).
 ats_domains:

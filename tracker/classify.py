@@ -18,8 +18,7 @@ RULES = [
         "decided not to move forward",
     ]),
     ("oa", [
-        "online assessment", "coding assessment", "hackerrank", "codesignal",
-        "take-home assessment", "technical assessment", "codility",
+        "assessment", "hackerrank", "codesignal", "codility", "take-home",
     ]),
     ("interview", [
         "invite you to interview", "invited to interview",
@@ -32,7 +31,9 @@ RULES = [
     ]),
     ("confirmation", [
         "application received", "we have received your application",
-        "thank you for applying", "your application has been submitted",
+        "thank you for applying", "thanks for applying",
+        "thanks for your interest", "thank you for your interest",
+        "your application has been submitted", "application has been received",
         "application confirmation",
     ]),
     ("outreach", [
