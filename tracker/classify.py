@@ -37,6 +37,13 @@ RULES = [
         "thanks for your interest", "thank you for your interest",
         "your application has been submitted", "application has been received",
         "application confirmation",
+        # Added 2026-10-27 after live misses: Uber's "Your recent job
+        # application" and Rippling/Golden's "We've got your application"
+        # were both labeled "other" although they are confirmations.
+        # Rejection patterns still run first, so a rejection that quotes
+        # these phrases is still caught above.
+        "we've got your application", "got your application",
+        "your recent job application",
     ]),
     ("outreach", [
         "reaching out", "came across your profile", "impressed by your background",
@@ -72,14 +79,36 @@ def classify(subject, snippet):
     return "other", ""
 
 
+# Optional variant -> canonical name map. Edit here, not in config.yaml,
+# so a newer config on another machine is never overwritten by this file.
+# NOTE: Citadel and Citadel Securities are TWO companies sharing one
+# recruiting system. Never map one to the other; longest-match-first
+# below keeps their emails attributed separately.
+ALIASES = {
+    # "roblox hiring team": "Roblox",
+    # "epic games": "Epic",
+    # Added 2026-10-27: canonical labels for senders whose ATS domain
+    # otherwise steals the label (Rippling -> Golden).
+    "golden analytics": "Golden",
+    "uber talent": "Uber",
+}
+
+
 def extract_company(from_header, subject, known_companies, ats_domains):
     """Best-effort company match. Returns a name or 'Unknown'."""
     hay = f"{from_header} {subject}".lower()
-    for name in known_companies:
+    alias_map = {k.lower(): v for k, v in ALIASES.items()}
+    # Alias variants first, longest first: "roblox hiring team" beats "roblox".
+    for variant in sorted(alias_map, key=len, reverse=True):
+        if re.search(r"\b" + re.escape(variant) + r"\b", hay):
+            return alias_map[variant]
+    # Known companies, longest first: "Citadel Securities" must win over
+    # "Citadel", or their joint-branded emails all land on Citadel.
+    for name in sorted(known_companies, key=len, reverse=True):
         # Word-boundary match: plain substring makes "wing" hit "following"
         # and "arc" hit "research", stealing other companies' emails.
         if re.search(r"\b" + re.escape(name.lower()) + r"\b", hay):
-            return name
+            return alias_map.get(name.lower(), name)
     # Try the From display name, e.g. "Jane via Greenhouse" -> "Jane"
     m = re.match(r'"?([^"<@]+?)"?\s*(?:via|<|$)', from_header)
     if m:
@@ -88,11 +117,12 @@ def extract_company(from_header, subject, known_companies, ats_domains):
             # strip trailing "via ..." leftovers
             cand = re.sub(r"\s+via\s+.*$", "", cand, flags=re.I).strip()
             if cand:
-                return cand.title()
+                return alias_map.get(cand.lower(), cand.title())
     # Fallback: sender domain's first label, e.g. stripe.com -> Stripe
     dm = re.search(r"@([\w.-]+)", from_header)
     if dm:
         domain = dm.group(1).lower()
         if not any(domain == d or domain.endswith("." + d) for d in ats_domains):
-            return domain.split(".")[0].title()
+            label = domain.split(".")[0]
+            return alias_map.get(label, label.title())
     return "Unknown"

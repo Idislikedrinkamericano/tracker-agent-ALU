@@ -11,7 +11,8 @@ EMOJI = {
 def show_stats(conn):
     s = store.stats(conn)
     total = sum(s.values())
-    print(f"\n\u6218\u51b5: \u5df2\u6295 {total}", end="")
+    postings = store.posting_count(conn)
+    print(f"\n\u6218\u51b5: \u5df2\u6295 {postings} \u5c97 / {total} \u5bb6\u516c\u53f8", end="")
     parts = []
     if s.get("rejected"):
         parts.append(f"\u274c \u62d2 {s['rejected']}")
@@ -25,6 +26,9 @@ def show_stats(conn):
     if pending:
         parts.append(f"\u23f3 \u7b49\u6d88\u606f {pending}")
     print(" \uff5c " + " \uff5c ".join(parts) if parts else "")
+    multi = store.multi_posting_companies(conn)
+    if multi:
+        print("\u591a\u5c97\u516c\u53f8: " + ", ".join(f"{name} \u00d7{n}" for name, n in multi))
 
 
 def show_digest(conn, limit=20):

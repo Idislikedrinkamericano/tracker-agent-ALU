@@ -70,6 +70,26 @@ def stats(conn):
     return dict(cur.fetchall())
 
 
+def posting_count(conn):
+    """Submitted postings ~= confirmation emails (one per application).
+
+    Companies are the unit of the companies table, so postings must be
+    counted from events, not from company rows.
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM events WHERE category = 'confirmation'")
+    return cur.fetchone()[0]
+
+
+def multi_posting_companies(conn):
+    """Companies with >1 confirmation email: the visible proof of merging."""
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT company, COUNT(*) AS n FROM events WHERE category = 'confirmation' "
+        "GROUP BY company HAVING n > 1 ORDER BY n DESC, company")
+    return cur.fetchall()
+
+
 def recent_events(conn, limit=20):
     cur = conn.cursor()
     cur.execute(
